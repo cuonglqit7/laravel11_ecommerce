@@ -2,12 +2,13 @@
 @section('title', 'Quản lý khách hàng')
 @section('checked')
     <nav class="flex flex-col space-y-2">
-        <a href="#" class="px-3 py-2 hover:bg-gray-700 rounded text-sm">Dashboard</a>
+        <a href="{{ route('home') }}" class="px-3 py-2 hover:bg-gray-700 rounded text-sm">Dashboard</a>
         <a href="{{ route('products.index') }}" class="px-3 py-2 hover:bg-gray-700 rounded text-sm">Sản
             phẩm</a>
 
         <a href="{{ route('users.index') }}" class="px-3 py-2 bg-gray-700 rounded text-sm">Khách
             hàng</a>
+        <a href="{{ route('roles.index') }}" class="px-3 py-2 hover:bg-gray-700 rounded text-sm">Quyền hạng</a>
         <a href="#" class="px-3 py-2 hover:bg-gray-700 rounded text-sm">Cài đặt</a>
     </nav>
 @endsection
@@ -32,6 +33,7 @@
             <a href="{{ route('users.create') }}"
                 class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 text-xs">Thêm người dùng mới</a>
         </div>
+        <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
         @session('success')
             <div class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
                 role="alert">
@@ -52,6 +54,7 @@
                     <th class="p-2">ID</th>
                     <th class="p-2">Tên người dùng</th>
                     <th class="p-2">Email</th>
+                    <th class="p-2">Xác thực Email</th>
                     <th class="p-2">Roles</th>
                     <th class="p-2">Hành động</th>
                 </tr>
@@ -67,6 +70,15 @@
                             @endcan
                         </td>
                         <td class="p-2">{{ $user->email }}</td>
+                        @if ($user->email_verified_at == null)
+                            <td class="p-2 text-red-600">
+                                Chưa xác thực
+                            </td>
+                        @else
+                            <td class="p-2 text-green-600">
+                                Đã xác thực
+                            </td>
+                        @endif
                         <td class="p-2">
                             @foreach ($user->getRoleNames() as $roleName)
                                 <span

@@ -2,7 +2,7 @@
 @section('title', 'Thêm mới')
 @section('checked')
     <nav class="flex flex-col space-y-2">
-        <a href="#" class="px-3 py-2 hover:bg-gray-700 rounded text-sm">Dashboard</a>
+        <a href="{{ route('home') }}" class="px-3 py-2 hover:bg-gray-700 rounded text-sm">Dashboard</a>
         <a href="{{ route('products.index') }}" class="px-3 py-2 hover:bg-gray-700 rounded text-sm">Sản
             phẩm</a>
 
