@@ -14,14 +14,15 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         // dd($request->all());
-
+        $categories = Category::withCount('products')->get();
+        $numperpage = $request->record_number ?? 10;
         $categories = Category::query()
             ->when($request->category_name, function ($query) use ($request) {
                 $query->where('category_name', 'like', '%' . $request->category_name . '%');
             })
             ->orderBy('position', 'ASC')
-            ->get();
-        return view('categories.index', compact('categories'));
+            ->paginate($numperpage);
+        return view('categories.index', compact('categories', 'numperpage'));
     }
 
 
@@ -71,6 +72,7 @@ class CategoryController extends Controller
      */
     public function show(Request $request, Category $category)
     {
+        $numperpage = $request->record_number ?? 10;
         $sub_categories = Category::query()
             ->when($request->category_name, function ($query) use ($request) {
                 $query->where('category_name', 'like', '%' . $request->category_name . '%');
@@ -78,7 +80,7 @@ class CategoryController extends Controller
             ->where('parent_id', '=', $category->id)
             ->orderBy('position', 'ASC')
             ->get();
-        return view('categories.show', compact('sub_categories', 'category'));
+        return view('categories.show', compact('sub_categories', 'category', 'numperpage'));
     }
 
     /**
@@ -124,8 +126,17 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return back()->with('success', 'Danh mục đã được xóa thành công!');
+    }
+
+    public function toggleStatus($id)
+    {
+        $category = Category::find($id);
+        $category->status = !$category->status;
+        $category->save();
+        return back()->with('success', 'Trạng thái danh mục đã được cập nhật!');
     }
 }

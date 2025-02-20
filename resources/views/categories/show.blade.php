@@ -39,11 +39,22 @@
         <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
 
         <h2 class="text-2xl font-extrabold dark:text-white">Danh mục: {{ $category->category_name }}</h2>
-        <form action="{{ route('categories.show', $category->slug) }}" method="GET"
+        <form action="{{ route('categories.show', $category->slug) }}" method="POST"
             class="flex flex-wrap justify-end items-center gap-2 my-4">
             @csrf
+            @method('GET')
+            <div>
+                <select id="record_number" name="record_number"
+                    class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    <option value="5" {{ $numperpage == 5 ? 'selected' : '' }}>5</option>
+                    <option value="10" {{ $numperpage == 10 ? 'selected' : '' }}>10</option>
+                    <option value="15" {{ $numperpage == 15 ? 'selected' : '' }}>15</option>
+                    <option value="20" {{ $numperpage == 20 ? 'selected' : '' }}>20</option>
+                </select>
+            </div>
             <input type="text" name="category_name" placeholder="Tên danh mục" value="{{ request('category_name') }}"
                 class="border rounded p-2 text-sm" />
+
             <button type="submit" class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 text-xs">Tìm</button>
             <a href="{{ route('categories.show', $category->slug) }}"
                 class="bg-gray-400 text-white px-3 py-2 rounded hover:bg-gray-500 text-xs">Xóa lọc</a>
@@ -55,10 +66,10 @@
                 <thead>
                     <tr class="bg-gray-200 text-left">
                         <th class="p-2">STT</th>
-                        <th class="p-2">Tên danh mục</th>
+                        <th class="p-2">Tên danh mục con</th>
                         <th class="p-2">Slug</th>
                         <th class="p-2">Mô tả</th>
-                        <th class="p-2">Vị trí</th>
+                        <th class="p-2">Trạng thái</th>
                         <th class="p-2">Hành động</th>
                     </tr>
                 </thead>
@@ -72,7 +83,16 @@
                             </td>
                             <td class="p-2">{{ $sub_category->slug }}</td>
                             <td class="p-2">{{ $sub_category->description }}</td>
-                            <td class="p-2">{{ $sub_category->position }}</td>
+                            <td class="p-2">
+                                <form action="{{ route('categories.toggleStatus', $category->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button
+                                        class="{{ $category->status ? 'bg-green-500' : 'bg-red-500' }} text-white px-2 py-1 rounded">
+                                        {{ $category->status ? 'Hiển thị' : 'Ẩn' }}
+                                    </button>
+                                </form>
+                            </td>
                             <td class="flex gap-1">
                                 <a href="{{ route('categories.edit', $sub_category->slug) }}">
                                     <svg class="w-6 h-6 text-yellow-500" xmlns="http://www.w3.org/2000/svg"
