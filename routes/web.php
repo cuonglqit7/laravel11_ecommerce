@@ -4,15 +4,20 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
-Route::get('/', function () {
-    return view('welcome');
-});
+use Illuminate\Support\Facades\Log;
 
 Auth::routes();
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware('auth')->group(function () {
+    Route::resource('users', UserController::class);
+    Route::resource('products', ProductController::class);
+    Route::resource('roles', RoleController::class);
+});
 
-Route::resource('users', UserController::class);
-Route::resource('products', ProductController::class);
-Route::resource('roles', RoleController::class);
+
+// các route không có sẽ hiện trang 404
+Route::fallback(function () {
+    Log::info("Fallback route hit. Request details:", request()->all());
+    return view('404');
+});
