@@ -62,39 +62,42 @@
         @if ($sub_categories->isEmpty())
             <p class="mt-2">Không có danh mục con nào</p>
         @else
-            <table class="w-full border-collapse bg-white shadow-md rounded-md text-xs mt-4">
+            <table class="w-full border-collapse bg-white shadow-lg rounded-lg text-sm mt-4">
                 <thead>
-                    <tr class="bg-gray-200 text-left">
-                        <th class="p-2">STT</th>
-                        <th class="p-2">Tên danh mục con</th>
-                        <th class="p-2">Slug</th>
-                        <th class="p-2">Mô tả</th>
-                        <th class="p-2">Trạng thái</th>
-                        <th class="p-2">Hành động</th>
+                    <tr class="bg-gray-100 text-left">
+                        <th class="p-3">STT</th>
+                        <th class="p-3">Tên danh mục con</th>
+                        <th class="p-3">Slug</th>
+                        <th class="p-3">Mô tả</th>
+                        <th class="p-3">Trạng thái</th>
+                        <th class="p-3">Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($sub_categories as $key => $sub_category)
-                        <tr class="border-t">
-                            <td class="p-2">{{ $key + 1 }}</td>
-                            <td class="p-2">
+                        <tr class="border-t hover:bg-gray-100">
+                            <td class="p-3">{{ $key + 1 }}</td>
+                            <td class="p-3">
                                 <a href="{{ route('categories.show', $sub_category->slug) }}"
-                                    class="font-medium dark:text-blue-500 hover:underline">{{ $sub_category->category_name }}</a>
+                                    class="font-semibold text-blue-600 hover:underline">
+                                    {{ $sub_category->category_name }}
+                                </a>
                             </td>
-                            <td class="p-2">{{ $sub_category->slug }}</td>
-                            <td class="p-2">{{ $sub_category->description }}</td>
-                            <td class="p-2">
-                                <form action="{{ route('categories.toggleStatus', $category->id) }}" method="POST">
+                            <td class="p-3">{{ $sub_category->slug }}</td>
+                            <td class="p-3">{{ $sub_category->description }}</td>
+                            <td class="p-3">
+                                <form action="{{ route('categories.toggleStatus', $sub_category->id) }}" method="POST">
                                     @csrf
                                     @method('PATCH')
                                     <button
-                                        class="{{ $category->status ? 'bg-green-500' : 'bg-red-500' }} text-white px-2 py-1 rounded">
-                                        {{ $category->status ? 'Hiển thị' : 'Ẩn' }}
+                                        class="px-3 py-1 rounded-full text-white {{ $sub_category->status ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600' }}">
+                                        {{ $sub_category->status ? 'Hiển thị' : 'Ẩn' }}
                                     </button>
                                 </form>
                             </td>
-                            <td class="flex gap-1">
-                                <a href="{{ route('categories.edit', $sub_category->slug) }}">
+                            <td class="p-3 flex gap-2">
+                                <a href="{{ route('categories.edit', $sub_category->slug) }}"
+                                    class="hover:scale-110 transition-transform">
                                     <svg class="w-6 h-6 text-yellow-500" xmlns="http://www.w3.org/2000/svg"
                                         fill="currentColor" viewBox="0 0 24 24">
                                         <path
@@ -105,8 +108,8 @@
                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button>
-                                        <svg class="w-6 h-6 text-gray-800" xmlns="http://www.w3.org/2000/svg"
+                                    <button class="hover:scale-110 transition-transform">
+                                        <svg class="w-6 h-6 text-red-600" xmlns="http://www.w3.org/2000/svg"
                                             fill="currentColor" viewBox="0 0 24 24">
                                             <path
                                                 d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" />
