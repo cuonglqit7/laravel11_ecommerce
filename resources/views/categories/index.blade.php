@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('title', 'Quản lý sản phẩm')
-@section('checked')
+@section('navbar')
     <x-component-navbar active="category" />
 @endsection
 @section('content')
@@ -67,7 +67,6 @@
                 <tr class="bg-gray-100 text-left">
                     <th class="p-3"><input type="checkbox" id="selectAll" class="accent-blue-500 hover:cursor-pointer">
                     </th>
-                    <th class="p-3">STT</th>
                     <th class="p-3">Tên danh mục</th>
                     <th class="p-3">Slug</th>
                     <th class="p-3">SL Sản phẩm</th>
@@ -78,15 +77,13 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($categories as $key => $category)
+                @foreach ($categories as $category)
                     @if ($category->parent_id == null)
                         <tr class="border-t hover:bg-gray-50 transition-all duration-200">
-                            <td class="p-3 text-center">
+                            <td class="p-3 text-left">
                                 <input type="checkbox" name="selected_categories[]" value="{{ $category->id }}"
                                     class="accent-blue-500">
                             </td>
-                            <td class="p-3">{{ $key + 1 }}</td>
-
                             <td class="p-3">
                                 @can('category-list')
                                     <a href="{{ route('categories.show', $category->slug) }}"
@@ -97,24 +94,39 @@
                             </td>
 
                             <td class="p-3 text-gray-600">{{ $category->slug }}</td>
-                            <td class="p-3 text-center">{{ $category->products_count ?? 0 }} sản phẩm</td>
+                            <td class="p-3 text-left">{{ $category->products_count ?? 0 }} sản phẩm</td>
                             <td class="p-3">{{ $category->description }}</td>
-                            <td class="p-3 text-center">{{ $category->position }}</td>
+                            <td class="p-3 text-left">{{ $category->position }}</td>
 
                             @can('category-edit')
-                                <td class="p-3 text-center">
+                                <td class="p-3 text-left">
                                     <form action="{{ route('categories.toggleStatus', $category->id) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
-                                        <button
-                                            class="{{ $category->status ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600' }} text-white px-3 py-1 rounded-full text-xs transition-all">
-                                            {{ $category->status ? 'Hiển thị' : 'Ẩn' }}
-                                        </button>
+
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" name="status" class="sr-only peer"
+                                                {{ $category->status ? 'checked' : '' }} onchange="this.form.submit()">
+
+                                            <div
+                                                class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 
+                                                    peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 
+                                                    peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full 
+                                                    peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 
+                                                    after:start-[2px] after:bg-white after:border-gray-300 after:border 
+                                                    after:rounded-full after:h-5 after:w-5 after:transition-all 
+                                                    dark:border-gray-600 peer-checked:bg-green-600 dark:peer-checked:bg-green-600">
+                                            </div>
+
+                                            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                                {{ $category->status ? 'Hiển thị' : 'Ẩn' }}
+                                            </span>
+                                        </label>
                                     </form>
                                 </td>
                             @endcan
 
-                            <td class="p-3 flex gap-2 justify-center">
+                            <td class="p-3 flex gap-2 justify-start">
                                 @can('category-edit')
                                     <a href="{{ route('categories.edit', $category->slug) }}"
                                         class="p-2 bg-yellow-400 hover:bg-yellow-500 rounded-full text-white transition-all">
@@ -126,7 +138,6 @@
                                         </svg>
                                     </a>
                                 @endcan
-
                                 @can('category-delete')
                                     <form action="{{ route('categories.destroy', $category->slug) }}" method="POST"
                                         onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
@@ -147,18 +158,20 @@
                 @endforeach
             </tbody>
         </table>
-
+        <div class="mt-2">
+            <p>Chức năng hàng loạt:</p>
+            <div class="mt-2">
+                <button class="p-2 bg-red-500 hover:bg-red-600 rounded-full text-white transition-all">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
         <!-- Phần phân trang -->
         <div class="mt-4 flex justify-center">
             {{ $categories->links() }}
-        </div>
-        <div>
-            <button class="p-2 bg-red-500 hover:bg-red-600 rounded-full text-white transition-all">
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                        d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" />
-                </svg>
-            </button>
         </div>
     </div>
 @endsection
@@ -181,9 +194,6 @@
                 "timeOut": "5000",
                 "showMethod": "slideDown",
                 "hideMethod": "slideUp",
-                // "onclick": function() {
-                //     alert("Bạn đã click vào thông báo!");
-                // }
             };
 
             toastr.success("{{ session('success') }}", "Thành công 🎉");

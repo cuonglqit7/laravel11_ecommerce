@@ -27,6 +27,7 @@ class CategoryController extends Controller
             ->when($request->category_name, function ($query) use ($request) {
                 $query->where('category_name', 'like', '%' . $request->category_name . '%');
             })
+            ->whereNotNull('position')
             ->orderBy('position', 'ASC')
             ->paginate($numperpage);
         return view('categories.index', compact('categories', 'numperpage'));
