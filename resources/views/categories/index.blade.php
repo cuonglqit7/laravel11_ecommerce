@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('title', 'Quản lý sản phẩm')
-@section('checked')
+@section('navbar')
     <x-component-navbar active="category" />
 @endsection
 @section('content')
@@ -80,7 +80,7 @@
                 @foreach ($categories as $category)
                     @if ($category->parent_id == null)
                         <tr class="border-t hover:bg-gray-50 transition-all duration-200">
-                            <td class="p-3 text-center">
+                            <td class="p-3 text-left">
                                 <input type="checkbox" name="selected_categories[]" value="{{ $category->id }}"
                                     class="accent-blue-500">
                             </td>
@@ -94,24 +94,39 @@
                             </td>
 
                             <td class="p-3 text-gray-600">{{ $category->slug }}</td>
-                            <td class="p-3 text-center">{{ $category->products_count ?? 0 }} sản phẩm</td>
+                            <td class="p-3 text-left">{{ $category->products_count ?? 0 }} sản phẩm</td>
                             <td class="p-3">{{ $category->description }}</td>
-                            <td class="p-3 text-center">{{ $category->position }}</td>
+                            <td class="p-3 text-left">{{ $category->position }}</td>
 
                             @can('category-edit')
-                                <td class="p-3 text-center">
+                                <td class="p-3 text-left">
                                     <form action="{{ route('categories.toggleStatus', $category->id) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
-                                        <button
-                                            class="{{ $category->status ? 'bg-green-500 hover:bg-green-600' : 'bg-red-500 hover:bg-red-600' }} text-white px-3 py-1 rounded-full text-xs transition-all">
-                                            {{ $category->status ? 'Hiển thị' : 'Ẩn' }}
-                                        </button>
+
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" name="status" class="sr-only peer"
+                                                {{ $category->status ? 'checked' : '' }} onchange="this.form.submit()">
+
+                                            <div
+                                                class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 
+                                                    peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 
+                                                    peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full 
+                                                    peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 
+                                                    after:start-[2px] after:bg-white after:border-gray-300 after:border 
+                                                    after:rounded-full after:h-5 after:w-5 after:transition-all 
+                                                    dark:border-gray-600 peer-checked:bg-green-600 dark:peer-checked:bg-green-600">
+                                            </div>
+
+                                            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                                {{ $category->status ? 'Hiển thị' : 'Ẩn' }}
+                                            </span>
+                                        </label>
                                     </form>
                                 </td>
                             @endcan
 
-                            <td class="p-3 flex gap-2 justify-center">
+                            <td class="p-3 flex gap-2 justify-start">
                                 @can('category-edit')
                                     <a href="{{ route('categories.edit', $category->slug) }}"
                                         class="p-2 bg-yellow-400 hover:bg-yellow-500 rounded-full text-white transition-all">
@@ -123,7 +138,6 @@
                                         </svg>
                                     </a>
                                 @endcan
-
                                 @can('category-delete')
                                     <form action="{{ route('categories.destroy', $category->slug) }}" method="POST"
                                         onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
@@ -180,9 +194,6 @@
                 "timeOut": "5000",
                 "showMethod": "slideDown",
                 "hideMethod": "slideUp",
-                // "onclick": function() {
-                //     alert("Bạn đã click vào thông báo!");
-                // }
             };
 
             toastr.success("{{ session('success') }}", "Thành công 🎉");
