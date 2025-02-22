@@ -65,7 +65,9 @@
             <table class="w-full border-collapse bg-white shadow-lg rounded-lg text-sm mt-4">
                 <thead>
                     <tr class="bg-gray-100 text-left">
-                        <th class="p-3">STT</th>
+                        <th class="p-3"><input type="checkbox" id="selectAll"
+                                class="accent-blue-500 hover:cursor-pointer">
+                        </th>
                         <th class="p-3">Tên danh mục con</th>
                         <th class="p-3">Slug</th>
                         <th class="p-3">Mô tả</th>
@@ -74,14 +76,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($sub_categories as $key => $sub_category)
+                    @foreach ($sub_categories as $sub_category)
                         <tr class="border-t hover:bg-gray-100">
-                            <td class="p-3">{{ $key + 1 }}</td>
+                            <td class="p-3 text-center">
+                                <input type="checkbox" name="selected_categories[]" value="{{ $category->id }}"
+                                    class="accent-blue-500">
+                            </td>
                             <td class="p-3">
-                                <a href="{{ route('categories.show', $sub_category->slug) }}"
-                                    class="font-semibold text-blue-600 hover:underline">
-                                    {{ $sub_category->category_name }}
-                                </a>
+                                {{ $sub_category->category_name }}
                             </td>
                             <td class="p-3">{{ $sub_category->slug }}</td>
                             <td class="p-3">{{ $sub_category->description }}</td>
@@ -97,20 +99,21 @@
                             </td>
                             <td class="p-3 flex gap-2">
                                 <a href="{{ route('categories.edit', $sub_category->slug) }}"
-                                    class="hover:scale-110 transition-transform">
-                                    <svg class="w-6 h-6 text-yellow-500" xmlns="http://www.w3.org/2000/svg"
-                                        fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M5 8a4 4 0 1 1 7.796 1.263l-2.533 2.534A4 4 0 0 1 5 8Zm4.06 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h2.172a2.999 2.999 0 0 1-.114-1.588l.674-3.372a3 3 0 0 1 .82-1.533L9.06 13Zm9.032-5a2.907 2.907 0 0 0-2.056.852L9.967 14.92a1 1 0 0 0-.273.51l-.675 3.373a1 1 0 0 0 1.177 1.177l3.372-.675a1 1 0 0 0 .511-.273l6.07-6.07a2.91 2.91 0 0 0-.944-4.742A2.907 2.907 0 0 0 18.092 8Z" />
+                                    class="p-2 bg-yellow-400 hover:bg-yellow-500 rounded-full text-white transition-all">
+                                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd"
+                                            d="M5 8a4 4 0 1 1 7.796 1.263l-2.533 2.534A4 4 0 0 1 5 8Zm4.06 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h2.172a2.999 2.999 0 0 1-.114-1.588l.674-3.372a3 3 0 0 1 .82-1.533L9.06 13Zm9.032-5a2.907 2.907 0 0 0-2.056.852L9.967 14.92a1 1 0 0 0-.273.51l-.675 3.373a1 1 0 0 0 1.177 1.177l3.372-.675a1 1 0 0 0 .511-.273l6.07-6.07a2.91 2.91 0 0 0-.944-4.742A2.907 2.907 0 0 0 18.092 8Z"
+                                            clip-rule="evenodd" />
                                     </svg>
                                 </a>
                                 <form action="{{ route('categories.destroy', $sub_category->slug) }}" method="POST"
                                     onsubmit="return confirm('Bạn có chắc chắn muốn xóa?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="hover:scale-110 transition-transform">
-                                        <svg class="w-6 h-6 text-red-600" xmlns="http://www.w3.org/2000/svg"
-                                            fill="currentColor" viewBox="0 0 24 24">
+                                    <button class="p-2 bg-red-500 hover:bg-red-600 rounded-full text-white transition-all">
+                                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                            viewBox="0 0 24 24">
                                             <path
                                                 d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" />
                                         </svg>
@@ -122,5 +125,49 @@
                 </tbody>
             </table>
         @endif
+        <div class="mt-2">
+            <p>Chức năng hàng loạt:</p>
+            <div class="mt-2">
+                <button class="p-2 bg-red-500 hover:bg-red-600 rounded-full text-white transition-all">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
     </div>
+
 @endsection
+@push('scripts')
+    {{-- chọn nhiều danh mục --}}
+    <script>
+        document.getElementById('selectAll').addEventListener('click', function() {
+            const checkboxes = document.querySelectorAll('input[name="selected_categories[]"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+    </script>
+    <script>
+        @if (session('success'))
+            toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "timeOut": "5000",
+                "showMethod": "slideDown",
+                "hideMethod": "slideUp",
+                // "onclick": function() {
+                //     alert("Bạn đã click vào thông báo!");
+                // }
+            };
+
+            toastr.success("{{ session('success') }}", "Thành công 🎉");
+        @endif
+
+        @if (session('error'))
+            toastr.error("{{ session('error') }}");
+        @endif
+    </script>
+@endpush

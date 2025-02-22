@@ -67,7 +67,6 @@
                 <tr class="bg-gray-100 text-left">
                     <th class="p-3"><input type="checkbox" id="selectAll" class="accent-blue-500 hover:cursor-pointer">
                     </th>
-                    <th class="p-3">STT</th>
                     <th class="p-3">Tên danh mục</th>
                     <th class="p-3">Slug</th>
                     <th class="p-3">SL Sản phẩm</th>
@@ -78,15 +77,13 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($categories as $key => $category)
+                @foreach ($categories as $category)
                     @if ($category->parent_id == null)
                         <tr class="border-t hover:bg-gray-50 transition-all duration-200">
                             <td class="p-3 text-center">
                                 <input type="checkbox" name="selected_categories[]" value="{{ $category->id }}"
                                     class="accent-blue-500">
                             </td>
-                            <td class="p-3">{{ $key + 1 }}</td>
-
                             <td class="p-3">
                                 @can('category-list')
                                     <a href="{{ route('categories.show', $category->slug) }}"
@@ -147,18 +144,20 @@
                 @endforeach
             </tbody>
         </table>
-
+        <div class="mt-2">
+            <p>Chức năng hàng loạt:</p>
+            <div class="mt-2">
+                <button class="p-2 bg-red-500 hover:bg-red-600 rounded-full text-white transition-all">
+                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
         <!-- Phần phân trang -->
         <div class="mt-4 flex justify-center">
             {{ $categories->links() }}
-        </div>
-        <div>
-            <button class="p-2 bg-red-500 hover:bg-red-600 rounded-full text-white transition-all">
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                    <path
-                        d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" />
-                </svg>
-            </button>
         </div>
     </div>
 @endsection

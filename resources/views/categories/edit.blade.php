@@ -93,8 +93,8 @@
 
             <div class="flex justify-end gap-3">
                 <button type="submit"
-                    class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-300">Cập
-                    nhật</button>
+                    class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-300">Xác
+                    nhận</button>
                 <a href="{{ route('categories.index') }}"
                     class="bg-gray-300 text-gray-800 px-5 py-2 rounded-lg hover:bg-gray-400 transition duration-300">Hủy</a>
             </div>

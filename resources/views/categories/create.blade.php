@@ -40,7 +40,7 @@
             @csrf
             @method('PUT')
 
-            <h5 class="text-2xl font-bold text-gray-800 dark:text-white">Chỉnh sửa danh mục</h5>
+            <h5 class="text-2xl font-bold text-gray-800 dark:text-white">Thêm danh mục</h5>
 
             <div>
                 <label for="category_name" class="block text-gray-700 font-medium">Tên danh mục</label>
@@ -93,8 +93,8 @@
 
             <div class="flex justify-end gap-3">
                 <button type="submit"
-                    class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-300">Cập
-                    nhật</button>
+                    class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition duration-300">Xác
+                    nhận</button>
                 <a href="{{ route('categories.index') }}"
                     class="bg-gray-300 text-gray-800 px-5 py-2 rounded-lg hover:bg-gray-400 transition duration-300">Hủy</a>
             </div>
