@@ -17,7 +17,7 @@ return new class extends Migration
             $table->decimal('discount_value', 10, 2);
             $table->date('start_date');
             $table->date('end_date');
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 

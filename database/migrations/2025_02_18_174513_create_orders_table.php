@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('payment_method', ['Bank_transfer', 'Momo', 'cod'])->default('COD');
             $table->enum('payment_status', ['Pending', 'Completed', 'Failed', 'Refunded'])->default('Pending');
             $table->enum('status', ['Pending', 'Completed', 'Cancelled'])->default('Pending');
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 
