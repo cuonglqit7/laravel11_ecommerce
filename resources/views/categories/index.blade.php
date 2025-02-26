@@ -65,26 +65,26 @@
         <table class="w-full border-collapse bg-white shadow-lg rounded-lg text-sm">
             <thead>
                 <tr class="bg-gray-100 text-left">
-                    <th class="p-3"><input type="checkbox" id="selectAll" class="accent-blue-500 hover:cursor-pointer">
+                    <th class="p-1"><input type="checkbox" id="selectAll" class="accent-blue-500 hover:cursor-pointer">
                     </th>
-                    <th class="p-3">Tên danh mục</th>
-                    <th class="p-3">Slug</th>
-                    <th class="p-3">SL Sản phẩm</th>
-                    <th class="p-3">Mô tả</th>
-                    <th class="p-3">Vị trí</th>
-                    <th class="p-3">Trạng thái</th>
-                    <th class="p-3">Hành động</th>
+                    <th class="p-2">Tên danh mục</th>
+                    <th class="p-2">Slug</th>
+                    <th class="p-2">SL Sản phẩm</th>
+                    <th class="p-2">Mô tả</th>
+                    <th class="p-2">Vị trí</th>
+                    <th class="p-2">Trạng thái</th>
+                    <th class="p-2">Hành động</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($categories as $category)
                     @if ($category->parent_id == null)
                         <tr class="border-t hover:bg-gray-50 transition-all duration-200">
-                            <td class="p-3 text-left">
+                            <td class="p-1 text-left">
                                 <input type="checkbox" name="selected_categories[]" value="{{ $category->id }}"
                                     class="accent-blue-500">
                             </td>
-                            <td class="p-3">
+                            <td class="p-1">
                                 @can('category-list')
                                     <a href="{{ route('categories.show', $category->slug) }}"
                                         title="{{ $category->category_name }}"
@@ -94,13 +94,13 @@
                                 @endcan
                             </td>
 
-                            <td class="p-3 text-gray-600">{{ $category->slug }}</td>
-                            <td class="p-3 text-left">{{ $category->products_count ?? 0 }} sản phẩm</td>
-                            <td class="p-3">{{ $category->description }}</td>
-                            <td class="p-3 text-left">{{ $category->position }}</td>
+                            <td class="p-1 text-gray-600">{{ $category->slug }}</td>
+                            <td class="p-1 text-left">{{ $category->products_count ?? 0 }} sản phẩm</td>
+                            <td class="p-1">{{ $category->description }}</td>
+                            <td class="p-1 text-left">{{ $category->position }}</td>
 
                             @can('category-edit')
-                                <td class="p-3 text-left">
+                                <td class="p-1 text-left">
                                     <form action="{{ route('categories.toggleStatus', $category->id) }}" method="POST">
                                         @csrf
                                         @method('PATCH')
@@ -127,7 +127,7 @@
                                 </td>
                             @endcan
 
-                            <td class="p-3 flex gap-2 justify-start">
+                            <td class="p-1 flex gap-2 justify-start">
                                 @can('category-edit')
                                     <a href="{{ route('categories.edit', $category->slug) }}"
                                         class="p-2 bg-yellow-400 hover:bg-yellow-500 rounded-full text-white transition-all">
