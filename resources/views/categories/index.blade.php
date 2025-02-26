@@ -28,39 +28,39 @@
 
         </div>
         <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700">
-        {{-- @session('success')
-            <div class="flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-                role="alert">
-                <svg class="shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                </svg>
-                <span class="sr-only">Info</span>
-                <div>
-                    {{ $value }}
+        <div class="flex justify-between">
+            <div>
+                <p>Chức năng hàng loạt:</p>
+                <div class="mt-2">
+                    <button class="p-2 bg-red-500 hover:bg-red-600 rounded-full text-white transition-all">
+                        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" />
+                        </svg>
+                    </button>
                 </div>
             </div>
-        @endsession --}}
-        <form action="{{ route('categories.index') }}" method="POST"
-            class="flex flex-wrap justify-end items-center gap-2 my-4">
-            @csrf
-            @method('GET')
-            <div>
-                <select id="record_number" name="record_number"
-                    class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    <option value="5" {{ $numperpage == 5 ? 'selected' : '' }}>5</option>
-                    <option value="10" {{ $numperpage == 10 ? 'selected' : '' }}>10</option>
-                    <option value="15" {{ $numperpage == 15 ? 'selected' : '' }}>15</option>
-                    <option value="20" {{ $numperpage == 20 ? 'selected' : '' }}>20</option>
-                </select>
-            </div>
-            <input type="text" name="category_name" placeholder="Tên danh mục" value="{{ request('category_name') }}"
-                class="border rounded p-2 text-sm" />
-            <button type="submit" class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 text-xs">Tìm</button>
-            <a href="{{ route('categories.index') }}"
-                class="bg-gray-400 text-white px-3 py-2 rounded hover:bg-gray-500 text-xs">Xóa lọc</a>
-        </form>
+            <form action="{{ route('categories.index') }}" method="POST"
+                class="flex flex-wrap justify-end items-center gap-2 my-4">
+                @csrf
+                @method('GET')
+                <div>
+                    <select id="record_number" name="record_number"
+                        class="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="5" {{ $numperpage == 5 ? 'selected' : '' }}>5</option>
+                        <option value="10" {{ $numperpage == 10 ? 'selected' : '' }}>10</option>
+                        <option value="15" {{ $numperpage == 15 ? 'selected' : '' }}>15</option>
+                        <option value="20" {{ $numperpage == 20 ? 'selected' : '' }}>20</option>
+                    </select>
+                </div>
+                <input type="text" name="name" placeholder="Tên quyền" value="{{ request('name') }}"
+                    class="border rounded p-2 text-sm" />
+                <button type="submit"
+                    class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 text-xs">Tìm</button>
+                <a href="{{ route('categories.index') }}"
+                    class="bg-gray-400 text-white px-3 py-2 rounded hover:bg-gray-500 text-xs">Xóa lọc</a>
+            </form>
+        </div>
 
         <table class="w-full border-collapse bg-white shadow-lg rounded-lg text-sm">
             <thead>
@@ -87,6 +87,7 @@
                             <td class="p-3">
                                 @can('category-list')
                                     <a href="{{ route('categories.show', $category->slug) }}"
+                                        title="{{ $category->category_name }}"
                                         class="font-semibold text-blue-600 hover:underline">{{ $category->category_name }}</a>
                                 @else
                                     {{ $category->category_name }}
@@ -158,19 +159,8 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="mt-2">
-            <p>Chức năng hàng loạt:</p>
-            <div class="mt-2">
-                <button class="p-2 bg-red-500 hover:bg-red-600 rounded-full text-white transition-all">
-                    <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                        <path
-                            d="M8.586 2.586A2 2 0 0 1 10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 1 1 0 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8a1 1 0 0 1 0-2h3V4a2 2 0 0 1 .586-1.414ZM10 6h4V4h-4v2Zm1 4a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Zm4 0a1 1 0 1 0-2 0v8a1 1 0 1 0 2 0v-8Z" />
-                    </svg>
-                </button>
-            </div>
-        </div>
         <!-- Phần phân trang -->
-        <div class="mt-4 flex justify-center">
+        <div class="mt-4">
             {{ $categories->links() }}
         </div>
     </div>
