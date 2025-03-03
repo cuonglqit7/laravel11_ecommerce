@@ -24,6 +24,11 @@ class Product extends Model
         ]);
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function attributes()
     {
         return $this->hasMany(ProductAttribute::class);
@@ -41,5 +46,10 @@ class Product extends Model
     public function articles()
     {
         return $this->belongsToMany(Article::class, 'product_articles', 'product_id', 'article_id');
+    }
+
+    public function discounts()
+    {
+        return $this->hasManyThrough(Discount::class, ProductDiscount::class, 'product_id', 'id', 'id', 'discount_id');
     }
 }

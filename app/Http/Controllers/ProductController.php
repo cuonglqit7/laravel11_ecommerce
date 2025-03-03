@@ -9,6 +9,7 @@ use App\Models\ProductAttribute;
 use App\Models\ProductDiscount;
 use App\Models\ProductImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -54,9 +55,10 @@ class ProductController extends Controller
 
         // dd($request->all());
         $validator = Validator::make($request->all(), [
-            'product_name'   => 'required|string|max:255',
-            'price'          => 'required|numeric|min:0',
+            'product_name'  => 'required|string|max:255',
+            'price'         => 'required|numeric|min:0',
             'category'       => 'required',
+            'discounts'       => 'nullable|string',
             'attribute_name' => 'nullable|array',
             'attribute_value' => 'nullable|array',
             'description'    => 'nullable|string',
@@ -79,10 +81,15 @@ class ProductController extends Controller
             'category_id' => $request->category
         ]);
 
-        ProductDiscount::create([
-            'product_id' => $product->id,
-            'discount_id' => $request->discount_value,
-        ]);
+        if (!empty($request->discounts)) {
+            $discountIds = explode(',', $request->discounts);
+            foreach ($discountIds as $discountId) {
+                ProductDiscount::create([
+                    'product_id' => $product->id,
+                    'discount_id' => $discountId
+                ]);
+            }
+        }
 
         foreach ($request->attribute_name as $index => $attribute_name) {
             ProductAttribute::create([
@@ -117,7 +124,10 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $product = Product::with(['attributes', 'images', 'discounts'])->find($id);
+        $categories = Category::orderBy('created_at', 'DESC')->get();
+        $discounts = Discount::orderBy('discount_value', 'DESC')->get();
+        return view('products.edit', compact('product', 'categories', 'discounts'));
     }
 
     /**
@@ -125,7 +135,36 @@ class ProductController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        dd($request->all());
+        $validator = Validator::make($request->all(), [
+            'product_name'   => 'required|string|max:255',
+            'price'          => 'required|numeric|min:0',
+            'category'       => 'required',
+            'attribute_name' => 'nullable|array',
+            'attribute_value' => 'nullable|array',
+            'description'    => 'nullable|string',
+            'status'         => 'required|boolean',
+            'images'         => 'nullable|array|max:5',
+            'images.*'       => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $product = Product::find($id);
+        $product->update([
+            'product_name' => $request->product_name,
+            'slug' => Str::slug($request->product_name),
+            'description' => $request->description,
+            'price' => $request->price,
+            'status' => $request->status,
+            'category_id' => $request->category
+        ]);
+
+        return redirect()->route('products.index')->with('success', 'Cập nhật sản phẩm thành công!');
     }
 
     /**

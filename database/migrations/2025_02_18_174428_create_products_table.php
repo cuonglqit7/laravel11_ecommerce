@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('slug', 255)->unique();
             $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
+            $table->integer('quantity_in_stock')->notNull();
+            $table->integer('quantity_sold')->default(0);
             $table->boolean('status')->default(true);
             $table->timestamps();
 

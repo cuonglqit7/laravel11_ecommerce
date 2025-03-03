@@ -9,4 +9,9 @@ class ProductDiscount extends Model
 {
     use HasFactory;
     protected $fillable = ['product_id', 'discount_id'];
+
+    public function discount()
+    {
+        return $this->belongsTo(Discount::class, 'discount_id');
+    }
 }
