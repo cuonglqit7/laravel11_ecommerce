@@ -57,8 +57,7 @@
                     <th class="p-1"><input type="checkbox" id="selectAll" class="accent-blue-500 hover:cursor-pointer">
                     </th>
                     <th class="p-2 max-w-24">Tên sản phẩm</th>
-                    <th class="p-2 ps-3">Giá gốc</th>
-                    <th class="p-2 ps-3">Giá giảm</th>
+                    <th class="p-2 ps-3">Giá cả</th>
                     <th class="p-2">Danh mục</th>
                     <th class="p-2">Tồn kho</th>
                     <th class="p-2">Đã bán được</th>
@@ -78,12 +77,20 @@
                                 class="font-semibold text-blue-600 hover:underline">{{ $product->product_name }}</a>
                         </td>
                         <td class="p-1 ps-3">
-                            {{ number_format($product->price, 0, ',', '.') }} VNĐ
+                            @if ($product->price == $product->promotion_price)
+                                {{ number_format($product->price, 0, ',', '.') }} VNĐ
+                            @else
+                                <del>{{ number_format($product->price, 0, ',', '.') }} VNĐ</del> <br>
+
+                                <span class="text-red-600">{{ number_format($product->promotion_price, 0, ',', '.') }}
+                                    VNĐ</span>
+                            @endif
+
                         </td>
-                        <td class="p-1 ps-3">{{ number_format($product->promotion_price, 0, ',', '.') }} VNĐ</td>
+
                         <td class="p-1 ps-3">{{ $product->category->category_name }}</td>
                         <td class="p-1 ps-3">{{ $product->quantity_in_stock }}</td>
-                        <td class="p-1 ps-3">{{ $product->quantity_sold }}</td>
+                        <td class="p-1 ps-3"><span class="text-red-600 font-bold">{{ $product->quantity_sold }}</span></td>
                         <td class="p-1 ps-3">
                             @can('product-edit')
                                 <form action="{{ route('products.toggleStatus', $product->id) }}" method="POST">
