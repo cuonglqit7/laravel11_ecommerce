@@ -21,7 +21,6 @@ class Order extends Model
         'status',
         'user_note',
         'admin_note',
-        'ip_address',
     ];
 
     public function discounts()

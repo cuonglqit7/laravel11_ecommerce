@@ -12,9 +12,11 @@ use App\Http\Controllers\API\ProductFavoriteController;
 use App\Http\Controllers\API\ProductImageController;
 use App\Http\Controllers\API\OrderController;
 use App\Http\Controllers\API\PaymentController;
+use App\Http\Controllers\ArticleImageController;
 use App\Http\Controllers\ProductReviewController;
 use Illuminate\Support\Facades\Route;
 use L5Swagger\Http\Controllers\SwaggerController;
+
 
 Route::get('/api/documentation', [SwaggerController::class, 'api']);
 
@@ -86,4 +88,7 @@ Route::prefix('v1')->group(function () {
             Route::delete('/{id}', [ProductReviewController::class, 'deleteReview']);
         });
     });
+
+    //Hình ảnh bài viết
+    Route::post('/upload-articleImage', [ArticleImageController::class, 'upload'])->name('upload.articleImage');
 });
